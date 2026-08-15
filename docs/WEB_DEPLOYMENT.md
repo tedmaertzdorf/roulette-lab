@@ -5,13 +5,13 @@
 - Custom domein: `https://roulette.tedware.nl`
 - Flutter base href: `/`
 - GitHub-account: `tedmaertzdorf`
+- Repository: `tedmaertzdorf/roulette-lab` (`main`, publiek)
 - GitHub Pages CNAME-doel: `tedmaertzdorf.github.io`
 - Build/deployworkflow: `.github/workflows/deploy-pages.yml`
 
-De accountnaam is gecontroleerd via de gekoppelde GitHub-sessie. De lokale
-projectmap bevat op dit moment echter geen `.git`-metadata en in het account is
-nog geen herkenbare Roulette Lab-repository aanwezig. De repositorynaam moet
-daarom eerst expliciet worden gekoppeld of gekozen; die wordt niet aangenomen.
+De projectmap is gekoppeld aan de repository en volgt `origin/main`. GitHub
+Pages gebruikt **GitHub Actions** als publicatiebron en het custom domein
+`roulette.tedware.nl` is via de Pages API ingesteld.
 
 ## Automatische pipeline
 
@@ -31,17 +31,18 @@ Bij een custom Actions-workflow beheert GitHub de werkelijke domeinkoppeling via
 de Pages-instelling/API; daarom wordt die instelling na het koppelen van de
 repository ook expliciet gezet.
 
-## Eenmalige GitHub Pages-instelling
+## GitHub Pages-status
 
-Na het koppelen van de repository:
+- bron: GitHub Actions;
+- custom domain: `roulette.tedware.nl`;
+- meest recente productiebuild: geslaagd;
+- HTTPS-certificaat: wacht op de CNAME-wijziging bij STRATO;
+- **Enforce HTTPS**: wordt beschikbaar nadat GitHub de DNS-check en
+  certificaatuitgifte heeft voltooid.
 
-1. open **GitHub → repository → Settings → Pages**;
-2. kies bij **Build and deployment → Source** voor **GitHub Actions**;
-3. vul bij **Custom domain** `roulette.tedware.nl` in en sla op;
-4. activeer **Enforce HTTPS** zodra de DNS-check groen is.
-
-Deze stappen kunnen via de GitHub API worden uitgevoerd wanneer de exacte
-repository bekend is en de huidige accountrechten dat toestaan.
+Er resteert geen handmatige GitHub Pages-configuratie. Na DNS-propagatie kan
+HTTPS via de Pages API of via **Settings → Pages → Enforce HTTPS** worden
+ingeschakeld.
 
 ## Eenmalige STRATO DNS-instelling
 
@@ -57,7 +58,9 @@ TTL:    3600 (of STRATO-standaard)
 Als STRATO in het subdomeinscherm de volledige hostnaam toont, is de naam
 `roulette.tedware.nl`. Voeg geen `https://`, slash of repositorynaam aan het
 doel toe. Verwijder een conflicterende A-, AAAA- of andere CNAME-record voor
-dezelfde host als STRATO die niet automatisch vervangt.
+dezelfde host als STRATO die niet automatisch vervangt. Bij de laatste controle
+wees de host nog naar STRATO (`217.160.0.63` plus een STRATO-IPv6-adres); die
+records moeten door de CNAME worden vervangen.
 
 ## Controleren
 
