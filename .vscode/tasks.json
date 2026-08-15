@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Flutter: format controleren",
+      "type": "shell",
+      "command": "dart format --set-exit-if-changed .",
+      "problemMatcher": []
+    },
+    {
+      "label": "Flutter: analyze",
+      "type": "shell",
+      "command": "flutter analyze",
+      "problemMatcher": "$dart-analyze"
+    },
+    {
+      "label": "Flutter: tests",
+      "type": "shell",
+      "command": "flutter test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Flutter: Android release",
+      "type": "shell",
+      "command": "flutter build apk --release",
+      "problemMatcher": []
+    },
+    {
+      "label": "Flutter: Windows release",
+      "type": "shell",
+      "command": "flutter build windows --release",
+      "problemMatcher": []
+    }
+  ]
+}

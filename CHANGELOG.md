@@ -1,0 +1,28 @@
+# Changelog
+
+## 1.1.0 — 2026-08-15
+
+- Volledige Flutter Web-ondersteuning voor Chrome en Edge toegevoegd.
+- SQLite/Wasm-opslag via IndexedDB met dezelfde repository en transacties als
+  Android en Windows geïmplementeerd.
+- Zware voorspellingen en backtests draaien op Web in een afzonderlijke worker.
+- Responsive navigatie en compacte browserlay-out verbeterd.
+- Alle fonts, iconen, CanvasKit-assets en fallbacks lokaal gebundeld; geen
+  analytics, tracking of externe runtime-resources.
+- Versioned offlinecache en PWA-installatie na de eerste online laadbeurt
+  toegevoegd.
+- GitHub Pages Actions-workflow voor root-hosting op
+  `roulette.tedware.nl` toegevoegd.
+- Chrome end-to-end, Edge release/offline/herstart en 10.000-recordscenario's
+  gevalideerd.
+
+## 1.0.0 — 2026-08-15
+
+- Eerste volledige offline release voor Android en Windows.
+- Persistent invoerbord met analysemodus, geschiedenis-CRUD en undo.
+- Recente verdelingen, basisstatistiek en uitgebreide getaldetails.
+- Wielafstand-patroon en adaptief ensemble met officiële evaluatie.
+- Incrementele walk-forward backtest en uniforme baseline.
+- Transactionele SQLite-opslag, JSON-back-up, CSV en flexibele importpreview.
+- Licht/donker/systeemthema, responsieve navigatie, toetsenbord- en toegankelijkheidsbasis.
+- Automatische Android cloud-back-up uitgeschakeld; geen runtime-netwerktoegang.
