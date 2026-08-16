@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.0 — 2026-08-16
+
+- Automatische opvolgerkaart direct onder het invoerbord toegevoegd.
+- Na iedere ingevoerde draai verschijnen de recente historische opvolgers van
+  dat getal en de meest voorkomende opvolgers met aantallen en percentages.
+- Eerste voorkomens, de nog openstaande huidige opvolger en grote aantallen
+  unieke opvolgers hebben een compacte, responsieve staat gekregen.
+- Rechtstreekse navigatie naar de volledige getaldetails toegevoegd.
+- Automatische opvolgerweergave getest op desktop en kleine browsers.
+
 ## 1.1.0 — 2026-08-15
 
 - Volledige Flutter Web-ondersteuning voor Chrome en Edge toegevoegd.

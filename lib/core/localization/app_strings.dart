@@ -25,6 +25,11 @@ abstract final class AppStrings {
   static const String recentDistribution = 'Recente verdeling';
   static const String baseStatistics = 'Basisstatistiek';
   static const String numberDetails = 'Getaldetails';
+  static const String automaticSuccessors = 'Automatische opvolgers';
+  static const String recentSuccessorOrder =
+      'Laatste uitkomsten erna · nieuwste eerst';
+  static const String mostCommonSuccessors = 'Meest voorkomend daarna';
+  static const String viewFullNumberDetails = 'Bekijk alle getaldetails';
   static const String fullDistribution = 'Volledige verdeling';
   static const String whyThisResult = 'Waarom deze uitkomst?';
   static const String experimentalSignal = 'Experimenteel signaal';
@@ -60,7 +65,7 @@ abstract final class AppStrings {
   static const String animations = 'Subtiele animaties';
   static const String haptics = 'Haptische feedback op Android';
   static const String privacyOffline = 'Privacy en offline werking';
-  static const String versionInfo = 'App 1.0.0 · database 1 · modellen 1';
+  static const String versionInfo = 'App 1.2.0 · database 1 · modellen 1';
   static const String noPrediction =
       'Maak een voorspelling om beide experimentele modellen naast elkaar te zien.';
   static const String insufficientBacktest =
@@ -85,7 +90,6 @@ abstract final class AppStrings {
   static const String numberHint = 'Nummer 0–36';
   static const String invalidNumber =
       'Voer een geheel getal van 0 tot en met 36 in.';
-  static const String spinAdded = 'Draai toegevoegd.';
   static const String savedLocally = 'Lokaal opgeslagen.';
   static const String operationCancelled = 'Actie geannuleerd.';
   static const String tapToAdd = 'Tik op een getal om een draai toe te voegen.';
@@ -207,6 +211,33 @@ abstract final class AppStrings {
       '$positions: ${values.join(', ')}';
   static String successorsLabel(Iterable<int> values) =>
       '$lastSuccessors: ${values.join(', ')}';
+  static String spinAddedSuccessors(
+    int number,
+    Iterable<int> successors, {
+    required bool hasMore,
+  }) {
+    final List<int> values = successors.toList();
+    if (values.isEmpty) {
+      return '$number toegevoegd. Nog geen eerdere opvolger.';
+    }
+    return '$number toegevoegd. Eerder direct erna: '
+        '${values.join(', ')}${hasMore ? ', …' : ''}.';
+  }
+
+  static String automaticSuccessorSubtitle(int number) =>
+      'Na eerdere keren dat $number viel';
+  static String noAutomaticSuccessors(int number) =>
+      'Dit is het eerste geregistreerde voorkomen van $number. Er is nog geen '
+      'eerdere opvolger om te tonen.';
+  static String automaticSuccessorSummary(int count, int uniqueCount) =>
+      '$count ${count == 1 ? 'bekende overgang' : 'bekende overgangen'} · '
+      '$uniqueCount ${uniqueCount == 1 ? 'verschillend getal' : 'verschillende getallen'}';
+  static String currentSuccessorPending(int number) =>
+      'De zojuist ingevoerde $number wacht nu op zijn eigen opvolger.';
+  static String otherSuccessors(int count) =>
+      '+$count ${count == 1 ? 'andere opvolger' : 'andere opvolgers'} in de volledige details';
+  static String successorStatLabel(int number, int count, double share) =>
+      '$number kwam $count keer direct erna, ${percentage(share)}';
   static String modelVersion(int version, int spins) =>
       'Model v$version · $spins draaien';
   static String topDozenLabel(int dozen, double score) =>

@@ -170,6 +170,81 @@ void main() {
     await harness.dispose(tester);
   });
 
+  testWidgets('nieuwe invoer toont automatisch de eerdere opvolgers', (
+    WidgetTester tester,
+  ) async {
+    final _Harness harness = await _pumpApp(
+      tester,
+      const Size(1440, 1000),
+      seed: const <int>[8, 4, 8, 10, 3],
+    );
+
+    await _tapNumber(tester, 8);
+    await _settle(tester);
+
+    expect(find.byKey(const Key('automatic-successors-8')), findsOneWidget);
+    expect(find.text('Na eerdere keren dat 8 viel'), findsOneWidget);
+    expect(
+      find.text('8 toegevoegd. Eerder direct erna: 10, 4.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('2 bekende overgangen · 2 verschillende getallen'),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const Key('automatic-successor-recent-8-0-10')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const Key('automatic-successor-recent-8-1-4')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const Key('automatic-successor-stat-8-10')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const Key('automatic-successor-stat-8-4')),
+      findsOneWidget,
+    );
+    expect(
+      find.text('De zojuist ingevoerde 8 wacht nu op zijn eigen opvolger.'),
+      findsOneWidget,
+    );
+    final Finder fullDetails = find.byKey(
+      const Key('automatic-successors-details-8'),
+    );
+    await tester.ensureVisible(fullDetails);
+    await tester.tap(fullDetails);
+    await _settle(tester);
+    expect(harness.container.read(navigationProvider), 1);
+    expect(harness.container.read(selectedNumberProvider), 8);
+    expect(find.byKey(const Key('number-details-8')), findsOneWidget);
+    await harness.dispose(tester);
+  });
+
+  testWidgets('eerste voorkomen toont automatisch een nette lege staat', (
+    WidgetTester tester,
+  ) async {
+    final _Harness harness = await _pumpApp(tester, const Size(360, 800));
+
+    await _tapNumber(tester, 17);
+    await _settle(tester);
+
+    expect(find.byKey(const Key('automatic-successors-17')), findsOneWidget);
+    expect(
+      find.text('17 toegevoegd. Nog geen eerdere opvolger.'),
+      findsOneWidget,
+    );
+    expect(
+      find.textContaining('eerste geregistreerde voorkomen van 17'),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+    await harness.dispose(tester);
+  });
+
   testWidgets('200% tekstschaal en gelabelde tapdoelen blijven bruikbaar', (
     WidgetTester tester,
   ) async {

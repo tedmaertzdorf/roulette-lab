@@ -12,6 +12,7 @@ import '../../../core/widgets/section_card.dart';
 import '../../../domain/entities/app_settings.dart';
 import '../../../domain/entities/roulette_number_meta.dart';
 import '../../../domain/entities/spin.dart';
+import '../../../domain/services/analytics/roulette_analytics.dart';
 
 class RouletteBoard extends ConsumerStatefulWidget {
   const RouletteBoard({required this.spins, super.key});
@@ -182,11 +183,24 @@ class _RouletteBoardState extends ConsumerState<RouletteBoard> {
       if (!mounted) {
         return;
       }
+      final List<Spin> updatedSpins =
+          ref.read(appControllerProvider).value?.spins ?? widget.spins;
+      final List<int> recentSuccessors = numberDetails(
+        updatedSpins,
+        number,
+      ).recentSuccessors;
+      final List<int> visibleSuccessors = recentSuccessors.take(4).toList();
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
-            content: const Text(AppStrings.spinAdded),
+            content: Text(
+              AppStrings.spinAddedSuccessors(
+                number,
+                visibleSuccessors,
+                hasMore: recentSuccessors.length > visibleSuccessors.length,
+              ),
+            ),
             action: SnackBarAction(
               label: AppStrings.undo,
               onPressed: () =>

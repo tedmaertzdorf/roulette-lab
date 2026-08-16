@@ -9,6 +9,7 @@ import '../analysis/number_details_card.dart';
 import '../analysis/recent_statistics_cards.dart';
 import '../history/history_panel.dart';
 import '../prediction/prediction_cards.dart';
+import 'widgets/automatic_successors_card.dart';
 import 'widgets/roulette_board.dart';
 
 class DashboardPage extends ConsumerWidget {
@@ -84,6 +85,20 @@ class _DashboardContent extends ConsumerWidget {
           ),
         );
         final Widget board = RouletteBoard(spins: snapshot.spins);
+        final Widget automaticSuccessors = AutomaticSuccessorsCard(
+          spins: snapshot.spins,
+          animationsEnabled: settings.animationsEnabled,
+        );
+        final Widget boardWithSuccessors = Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            board,
+            if (snapshot.spins.isNotEmpty) ...<Widget>[
+              const SizedBox(height: 14),
+              automaticSuccessors,
+            ],
+          ],
+        );
         final Widget history = HistoryPanel(
           spins: snapshot.spins,
           height: constraints.maxWidth >= 1200 ? 720 : 360,
@@ -113,7 +128,7 @@ class _DashboardContent extends ConsumerWidget {
                   children: <Widget>[
                     SizedBox(width: 300, child: history),
                     const SizedBox(width: 14),
-                    SizedBox(width: 430, child: board),
+                    SizedBox(width: 430, child: boardWithSuccessors),
                     const SizedBox(width: 14),
                     Expanded(child: _SpacedColumn(children: insights)),
                   ],
@@ -132,7 +147,7 @@ class _DashboardContent extends ConsumerWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Expanded(child: board),
+                    Expanded(child: boardWithSuccessors),
                     const SizedBox(width: 14),
                     SizedBox(width: 290, child: history),
                   ],
@@ -146,7 +161,12 @@ class _DashboardContent extends ConsumerWidget {
         return SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
           child: _SpacedColumn(
-            children: <Widget>[disclaimer, board, ...insights, history],
+            children: <Widget>[
+              disclaimer,
+              boardWithSuccessors,
+              ...insights,
+              history,
+            ],
           ),
         );
       },
