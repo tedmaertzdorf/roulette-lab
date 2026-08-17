@@ -2,7 +2,9 @@
 library;
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:roulette_lab/domain/entities/roulette_bet_set.dart';
 import 'package:roulette_lab/domain/entities/spin.dart';
+import 'package:roulette_lab/domain/services/analytics/bet_set_analyzer.dart';
 import 'package:roulette_lab/domain/services/analytics/pattern_recognizer.dart';
 import 'package:roulette_lab/domain/services/analytics/roulette_analytics.dart';
 import 'package:roulette_lab/domain/services/evaluation/walk_forward_evaluator.dart';
@@ -17,6 +19,12 @@ void main() {
     final PatternReport patterns = const PatternRecognizer().analyze(history);
     expect(patterns.spinsAnalyzed, 120);
     expect(patterns.signals.length, lessThanOrEqualTo(4));
+    final setReport = const BetSetAnalyzer().analyze(
+      history: history,
+      predictions: const [],
+    );
+    expect(setReport.spinsAnalyzed, 120);
+    expect(setReport.patternAssessments, hasLength(rouletteBetSets.length));
 
     final wheel = const WheelDistanceEngine().predict(history);
     final ensemble = const AdaptiveEnsembleEngine().predict(history);

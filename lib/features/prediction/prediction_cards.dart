@@ -6,11 +6,18 @@ import '../../core/localization/app_strings.dart';
 import '../../core/widgets/roulette_number_badge.dart';
 import '../../core/widgets/section_card.dart';
 import '../../domain/entities/prediction.dart';
+import '../../domain/entities/spin.dart';
+import 'set_prediction_card.dart';
 
 class PredictionSection extends ConsumerStatefulWidget {
-  const PredictionSection({required this.predictions, super.key});
+  const PredictionSection({
+    required this.predictions,
+    required this.spins,
+    super.key,
+  });
 
   final List<PredictionRecord> predictions;
+  final List<Spin> spins;
 
   @override
   ConsumerState<PredictionSection> createState() => _PredictionSectionState();
@@ -53,6 +60,8 @@ class _PredictionSectionState extends ConsumerState<PredictionSection> {
             _calculating ? AppStrings.predicting : AppStrings.predictNext,
           ),
         ),
+        const SizedBox(height: 12),
+        SetPredictionCard(spins: widget.spins, predictions: widget.predictions),
         const SizedBox(height: 12),
         if (visible.isEmpty)
           const SectionCard(

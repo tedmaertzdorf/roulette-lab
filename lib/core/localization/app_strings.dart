@@ -8,6 +8,11 @@ abstract final class AppStrings {
   static const String settings = 'Instellingen';
   static const String settingsCompact = 'Opties';
   static const String input = 'Invoeren';
+  static const String quickInput = 'Snelle invoer';
+  static const String quickInputHelp =
+      'Typ 0–36 en druk op Toevoegen of Enter. Het veld blijft actief voor '
+      'het volgende getal.';
+  static const String addNumber = 'Toevoegen';
   static const String analyze = 'Analyseren';
   static const String history = 'Historie';
   static const String noHistory = 'Nog geen draaien ingevoerd.';
@@ -37,6 +42,33 @@ abstract final class AppStrings {
   static const String patternDisclaimer =
       'Dit beschrijft alleen recente herhaling. Iedere eerlijke draai blijft '
       'onafhankelijk; een patroon is geen voorspelling of inzetadvies.';
+  static const String setPrediction = 'Setanalyse volgende draai';
+  static const String setPredictionSubtitle =
+      'Tafelsets en Europese wielsectoren vergeleken';
+  static const String probabilityCalculation = 'Kansberekening';
+  static const String patternCalculation = 'Patroonanalyse';
+  static const String highestModelCoverage = 'Hoogste modeldekking';
+  static const String strongestPatternFit = 'Sterkste patroonfit';
+  static const String estimatedCoverage = 'Geschatte setdekking';
+  static const String patternWeightedCoverage = 'Patroongewogen dekking';
+  static const String fairCoverage = 'Eerlijke dekking';
+  static const String comparedWithFair = 't.o.v. eerlijke verdeling';
+  static const String setEvidence = 'Onderbouwing';
+  static const String coveredNumbers = 'Gedekte getallen';
+  static const String alternatives = 'Daarna';
+  static const String noSetModel =
+      'Bereken eerst de volgende draai om de twee bestaande kansmodellen '
+      'samen te voegen.';
+  static const String insufficientSetPattern =
+      'Minimaal zes draaien zijn nodig voor een patroonvergelijking van sets.';
+  static const String setAnalysisDisclaimer =
+      'Modeldekking en patroonfit zijn experimentele schattingen, geen echte '
+      'winstkans. Sets met meer getallen hebben vanzelf een hogere basisdekking '
+      'en uitbetalingen verschillen.';
+  static const String voisinsDuZero = 'Voisins du Zéro';
+  static const String tiersDuCylindre = 'Tiers du Cylindre';
+  static const String orphelins = 'Orphelins';
+  static const String jeuZero = 'Jeu Zéro';
   static const String recentSuccessorOrder =
       'Laatste uitkomsten erna · nieuwste eerst';
   static const String mostCommonSuccessors = 'Meest voorkomend daarna';
@@ -76,7 +108,7 @@ abstract final class AppStrings {
   static const String animations = 'Subtiele animaties';
   static const String haptics = 'Haptische feedback op Android';
   static const String privacyOffline = 'Privacy en offline werking';
-  static const String versionInfo = 'App 1.3.0 · database 1 · modellen 1';
+  static const String versionInfo = 'App 1.4.0 · database 1 · modellen 1';
   static const String noPrediction =
       'Maak een voorspelling om beide experimentele modellen naast elkaar te zien.';
   static const String insufficientBacktest =
@@ -271,6 +303,14 @@ abstract final class AppStrings {
       'laatste $transitions overgangen.';
   static String patternEvidence(int span, int repeats) =>
       '$span draaien · $repeats× herhaald';
+  static String modelSetSource(int count) =>
+      '$count ${count == 1 ? 'actief model' : 'actieve modellen'} gecombineerd';
+  static String patternSetSource(int spins) =>
+      'Laatste $spins ${spins == 1 ? 'draai' : 'draaien'} gewogen';
+  static String setCoverageReference(int count, double coverage) =>
+      '$count/37 getallen · ${percentage(coverage)}';
+  static String signedPercentage(double value) =>
+      '${value >= 0 ? '+' : ''}${(value * 100).toStringAsFixed(1)}%';
   static String noAutomaticSuccessors(int number) =>
       'Dit is het eerste geregistreerde voorkomen van $number. Er is nog geen '
       'eerdere opvolger om te tonen.';
