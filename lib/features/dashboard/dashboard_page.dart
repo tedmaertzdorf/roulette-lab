@@ -10,6 +10,7 @@ import '../analysis/recent_statistics_cards.dart';
 import '../history/history_panel.dart';
 import '../prediction/prediction_cards.dart';
 import 'widgets/automatic_successors_card.dart';
+import 'widgets/pattern_recognizer_card.dart';
 import 'widgets/roulette_board.dart';
 
 class DashboardPage extends ConsumerWidget {
@@ -104,6 +105,10 @@ class _DashboardContent extends ConsumerWidget {
           height: constraints.maxWidth >= 1200 ? 720 : 360,
         );
         final List<Widget> insights = <Widget>[
+          PatternRecognizerCard(
+            spins: snapshot.spins,
+            animationsEnabled: settings.animationsEnabled,
+          ),
           PredictionSection(predictions: snapshot.predictions),
           RecentDistributionCard(
             spins: snapshot.spins,

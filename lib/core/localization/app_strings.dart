@@ -26,6 +26,17 @@ abstract final class AppStrings {
   static const String baseStatistics = 'Basisstatistiek';
   static const String numberDetails = 'Getaldetails';
   static const String automaticSuccessors = 'Automatische opvolgers';
+  static const String patternRecognizer = 'Patroonherkenner';
+  static const String patternRecognizerSubtitle =
+      'Live analyse van de recentste draaien';
+  static const String patternEvidenceStrength = 'Bewijssterkte';
+  static const String patternEmerging = 'Opkomend';
+  static const String patternClear = 'Duidelijk';
+  static const String patternStrong = 'Sterk';
+  static const String noStablePattern = 'Geen stevig patroon actief';
+  static const String patternDisclaimer =
+      'Dit beschrijft alleen recente herhaling. Iedere eerlijke draai blijft '
+      'onafhankelijk; een patroon is geen voorspelling of inzetadvies.';
   static const String recentSuccessorOrder =
       'Laatste uitkomsten erna · nieuwste eerst';
   static const String mostCommonSuccessors = 'Meest voorkomend daarna';
@@ -65,7 +76,7 @@ abstract final class AppStrings {
   static const String animations = 'Subtiele animaties';
   static const String haptics = 'Haptische feedback op Android';
   static const String privacyOffline = 'Privacy en offline werking';
-  static const String versionInfo = 'App 1.2.0 · database 1 · modellen 1';
+  static const String versionInfo = 'App 1.3.0 · database 1 · modellen 1';
   static const String noPrediction =
       'Maak een voorspelling om beide experimentele modellen naast elkaar te zien.';
   static const String insufficientBacktest =
@@ -226,6 +237,40 @@ abstract final class AppStrings {
 
   static String automaticSuccessorSubtitle(int number) =>
       'Na eerdere keren dat $number viel';
+  static String patternAnalyzedSpins(int analyzed, int total) =>
+      total > analyzed
+      ? 'Laatste $analyzed van $total draaien onderzocht'
+      : '$analyzed ${analyzed == 1 ? 'draai' : 'draaien'} onderzocht';
+  static String patternNeedsMoreSpins(int remaining) =>
+      'Nog $remaining ${remaining == 1 ? 'draai' : 'draaien'} nodig om '
+      'herhaling verantwoord te beoordelen.';
+  static String exactCycleTitle(int period) =>
+      period == 1 ? 'Herhaald getal' : 'Herhalende getalcyclus';
+  static String exactCycleDescription(int span, int repeats) =>
+      'Dezelfde volgorde sluit de laatste $span draaien af en is daarin '
+      '$repeats× achter elkaar herhaald.';
+  static String categoryStreakTitle(String feature) => '$feature-reeks';
+  static String categoryStreakDescription(
+    String value,
+    int span,
+    String feature,
+  ) => 'De laatste $span draaien vallen allemaal onder $feature: $value.';
+  static String categoryAlternationTitle(String feature) =>
+      'Afwisselend $feature';
+  static String categoryAlternationDescription(
+    String first,
+    String second,
+    int span,
+  ) =>
+      '$first en $second wisselen elkaar al $span draaien zonder '
+      'onderbreking af.';
+  static String wheelCycleTitle(int period) =>
+      period == 1 ? 'Herhaalde wielstap' : 'Herhalend wielritme';
+  static String wheelCycleDescription(int transitions, int repeats) =>
+      'Dezelfde fysieke wielstapvolgorde herhaalt zich $repeats× over de '
+      'laatste $transitions overgangen.';
+  static String patternEvidence(int span, int repeats) =>
+      '$span draaien · $repeats× herhaald';
   static String noAutomaticSuccessors(int number) =>
       'Dit is het eerste geregistreerde voorkomen van $number. Er is nog geen '
       'eerdere opvolger om te tonen.';
