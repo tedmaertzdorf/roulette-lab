@@ -83,32 +83,71 @@ class _RouletteBoardState extends ConsumerState<RouletteBoard> {
             ),
             const SizedBox(height: 12),
             if (settings.boardMode == BoardMode.input) ...<Widget>[
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: TextField(
-                      key: const Key('numeric-spin-input'),
-                      controller: _numberController,
-                      focusNode: _numberFocus,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(2),
-                      ],
-                      decoration: const InputDecoration(
-                        labelText: AppStrings.numberHint,
-                        prefixIcon: Icon(Icons.keyboard),
+              Container(
+                key: const Key('quick-spin-input-card'),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.primaryContainer.withValues(alpha: 0.48),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.outlineVariant,
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      AppStrings.quickInput,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w800,
                       ),
-                      onSubmitted: (_) => _submitNumber(),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  IconButton.filled(
-                    tooltip: AppStrings.input,
-                    onPressed: _submitNumber,
-                    icon: const Icon(Icons.keyboard_return),
-                  ),
-                ],
+                    const SizedBox(height: 3),
+                    Text(
+                      AppStrings.quickInputHelp,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextFieldTapRegion(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          Expanded(
+                            child: TextField(
+                              key: const Key('numeric-spin-input'),
+                              controller: _numberController,
+                              focusNode: _numberFocus,
+                              keyboardType: TextInputType.number,
+                              textInputAction: TextInputAction.done,
+                              autocorrect: false,
+                              enableSuggestions: false,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(2),
+                              ],
+                              decoration: const InputDecoration(
+                                labelText: AppStrings.numberHint,
+                                prefixIcon: Icon(Icons.keyboard_rounded),
+                              ),
+                              onEditingComplete: _submitNumber,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          FilledButton.icon(
+                            key: const Key('quick-spin-submit'),
+                            onPressed: _submitNumber,
+                            icon: const Icon(Icons.add_rounded),
+                            label: const Text(AppStrings.addNumber),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 12),
             ],
@@ -148,18 +187,42 @@ class _RouletteBoardState extends ConsumerState<RouletteBoard> {
   }
 
   Future<void> _submitNumber() async {
-    final int? number = int.tryParse(_numberController.text);
+    final String input = _numberController.text.trim();
+    final int? number = int.tryParse(input);
     if (number == null || number < 0 || number > 36) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text(AppStrings.invalidNumber)));
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(const SnackBar(content: Text(AppStrings.invalidNumber)));
+      _keepQuickInputFocused(selectAll: input.isNotEmpty);
       return;
     }
+    // Clear before persistence so a fast next entry is never erased when the
+    // previous asynchronous write completes.
+    _numberController.clear();
+    _keepQuickInputFocused();
     final AppSettings settings =
         ref.read(settingsProvider).value ?? const AppSettings();
     await _add(number, settings);
-    _numberController.clear();
+    if (mounted) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _keepQuickInputFocused();
+        }
+      });
+    }
+  }
+
+  void _keepQuickInputFocused({bool selectAll = false}) {
+    if (!mounted) {
+      return;
+    }
     _numberFocus.requestFocus();
+    if (selectAll) {
+      _numberController.selection = TextSelection(
+        baseOffset: 0,
+        extentOffset: _numberController.text.length,
+      );
+    }
   }
 
   Future<void> _activate(int number, AppSettings settings) async {

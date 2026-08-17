@@ -109,7 +109,10 @@ class _DashboardContent extends ConsumerWidget {
             spins: snapshot.spins,
             animationsEnabled: settings.animationsEnabled,
           ),
-          PredictionSection(predictions: snapshot.predictions),
+          PredictionSection(
+            predictions: snapshot.predictions,
+            spins: snapshot.spins,
+          ),
           RecentDistributionCard(
             spins: snapshot.spins,
             windows: settings.recentWindows,

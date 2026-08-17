@@ -8,6 +8,7 @@ Roulette Lab Offline is een persoonlijke Flutter-app voor lokale analyse van han
 
 - correct Europees tafelbord en fysieke wielvolgorde;
 - invoer- en analysemodus, numerieke desktopinvoer en geldige herhalingen;
+- mobielvriendelijke snelle invoerbalk die na iedere invoer actief blijft;
 - persistente, virtuele historie met edit, delete, undo en instelbare volgorde;
 - vensters 5/10/20/30, kleur, parity, hoog/laag, kolommen en nul;
 - getalfrequentie, posities, gaps, voorgangers, opvolgers en wielburen;
@@ -15,6 +16,8 @@ Roulette Lab Offline is een persoonlijke Flutter-app voor lokale analyse van han
   volgorde en frequentieverdeling;
 - live patroonherkenning voor getalcycli, afwisselingen, reeksen en fysieke
   wielstappen, met conservatieve bewijssterkte en automatische herberekening;
+- dubbele setanalyse voor tafelsets en Europese wielsectoren op basis van zowel
+  de actieve kansmodellen als afzonderlijke patroonsignalen;
 - deterministisch wielafstand-model met vijf experts;
 - deterministisch adaptief ensemble met zeven experts en online Hedge-gewichten;
 - actieve snapshots voor precies de volgende draai, log-loss en Brier-score;

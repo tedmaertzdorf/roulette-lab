@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.4.0 — 2026-08-17
+
+- De snelle invoerbalk prominenter en mobielvriendelijk gemaakt.
+- Invoer wordt vóór lokale opslag geleegd en blijft op iPhone, Android en
+  desktop gefocust, zodat meerdere getallen achter elkaar veilig kunnen worden
+  toegevoegd.
+- Een afzonderlijke setanalyse voor de volgende draai toegevoegd met kleur,
+  even/oneven, laag/hoog, dozijnen, kolommen, Voisins du Zéro,
+  Tiers du Cylindre, Orphelins en Jeu Zéro.
+- De kansberekening combineert de twee bestaande actieve modelverdelingen; de
+  patroonberekening weegt recente resultaten, opvolgers, cycli en wielstappen.
+- Iedere set toont modeldekking, eerlijke 37-vaksreferentie, relatieve afwijking,
+  onderbouwing en alle gedekte getallen.
+
 ## 1.3.0 — 2026-08-17
 
 - Een live patroonherkenner als afzonderlijke dashboardkaart toegevoegd.

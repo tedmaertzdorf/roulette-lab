@@ -146,6 +146,119 @@ void main() {
     await harness.dispose(tester);
   });
 
+  testWidgets('snelle invoer bewaart getallen en houdt toetsenbordfocus', (
+    WidgetTester tester,
+  ) async {
+    final _Harness harness = await _pumpApp(tester, const Size(390, 1200));
+    final Finder input = find.byKey(const Key('numeric-spin-input'));
+    final Finder submit = find.byKey(const Key('quick-spin-submit'));
+    await tester.ensureVisible(input);
+    await tester.tap(input);
+    await tester.enterText(input, '12');
+    expect(tester.widget<ButtonStyleButton>(submit).onPressed, isNotNull);
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await _settle(tester);
+
+    EditableText editable = tester.widget<EditableText>(
+      find.descendant(of: input, matching: find.byType(EditableText)),
+    );
+    expect(editable.focusNode.hasFocus, isTrue);
+    expect(editable.controller.text, isEmpty);
+    expect(
+      harness.container
+          .read(appControllerProvider)
+          .requireValue
+          .spins
+          .map((Spin spin) => spin.number),
+      <int>[12],
+    );
+
+    await tester.enterText(input, '7');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await _settle(tester);
+    editable = tester.widget<EditableText>(
+      find.descendant(of: input, matching: find.byType(EditableText)),
+    );
+    expect(editable.focusNode.hasFocus, isTrue);
+    expect(editable.controller.text, isEmpty);
+    expect(
+      harness.container
+          .read(appControllerProvider)
+          .requireValue
+          .spins
+          .map((Spin spin) => spin.number),
+      <int>[12, 7],
+    );
+
+    await tester.enterText(input, '99');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await _settle(tester);
+    editable = tester.widget<EditableText>(
+      find.descendant(of: input, matching: find.byType(EditableText)),
+    );
+    expect(editable.focusNode.hasFocus, isTrue);
+    expect(
+      find.text('Voer een geheel getal van 0 tot en met 36 in.'),
+      findsOneWidget,
+    );
+    expect(
+      harness.container.read(appControllerProvider).requireValue.spins,
+      hasLength(2),
+    );
+    expect(tester.takeException(), isNull);
+    await harness.dispose(tester);
+  });
+
+  testWidgets('setanalyse toont kansmodel en patroon naast voorspellingen', (
+    WidgetTester tester,
+  ) async {
+    final _Harness harness = await _pumpApp(
+      tester,
+      const Size(1440, 1100),
+      seed: const <int>[1, 2, 3, 1, 2, 3, 1, 2, 3],
+    );
+    expect(find.byKey(const Key('set-prediction-card')), findsOneWidget);
+    expect(find.byKey(const Key('set-recommendation-model')), findsOneWidget);
+    expect(find.byKey(const Key('set-recommendation-pattern')), findsOneWidget);
+    expect(
+      find.text(
+        'Bereken eerst de volgende draai om de twee bestaande kansmodellen samen te voegen.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.byWidgetPredicate(
+        (Widget widget) =>
+            widget.key is ValueKey<String> &&
+            (widget.key! as ValueKey<String>).value.startsWith(
+              'set-pattern-winner-',
+            ),
+      ),
+      findsOneWidget,
+    );
+
+    final Finder predict = find.byKey(const Key('predict-next-button'));
+    await tester.ensureVisible(predict);
+    await tester.tap(predict);
+    await _settle(tester, cycles: 25);
+    expect(
+      find.byWidgetPredicate(
+        (Widget widget) =>
+            widget.key is ValueKey<String> &&
+            (widget.key! as ValueKey<String>).value.startsWith(
+              'set-model-winner-',
+            ),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.textContaining('2 actieve modellen gecombineerd'),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+    await harness.dispose(tester);
+  });
+
   testWidgets('geselecteerd getal toont echte opvolgers zonder invoer', (
     WidgetTester tester,
   ) async {

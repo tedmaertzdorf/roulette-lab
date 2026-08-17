@@ -24,10 +24,21 @@ void main() {
         );
     await _settle(tester);
 
-    for (final int number in const <int>[0, 21, 30, 24]) {
+    for (final int number in const <int>[0, 21, 30]) {
       await _tapNumber(tester, number);
       await _settle(tester);
     }
+    final Finder quickInput = find.byKey(const Key('numeric-spin-input'));
+    await tester.ensureVisible(quickInput);
+    await tester.tap(quickInput);
+    await tester.enterText(quickInput, '24');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await _settle(tester);
+    final EditableText editable = tester.widget<EditableText>(
+      find.descendant(of: quickInput, matching: find.byType(EditableText)),
+    );
+    expect(editable.focusNode.hasFocus, isTrue);
+    expect(editable.controller.text, isEmpty);
     AppSnapshot snapshot = container.read(appControllerProvider).requireValue;
     expect(snapshot.spins.map((spin) => spin.number), <int>[0, 21, 30, 24]);
 
@@ -42,6 +53,8 @@ void main() {
       ),
       hasLength(2),
     );
+    expect(find.byKey(const Key('set-prediction-card')), findsOneWidget);
+    expect(find.byKey(const Key('set-recommendation-model')), findsOneWidget);
 
     await _tapNumber(tester, 29);
     await _settle(tester);
