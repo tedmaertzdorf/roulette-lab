@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:roulette_lab/domain/entities/spin.dart';
+import 'package:roulette_lab/domain/services/analytics/pattern_recognizer.dart';
 import 'package:roulette_lab/domain/services/analytics/roulette_analytics.dart';
 import 'package:roulette_lab/domain/services/evaluation/walk_forward_evaluator.dart';
 import 'package:roulette_lab/domain/services/prediction/adaptive_ensemble_engine.dart';
@@ -13,6 +14,9 @@ void main() {
     final List<Spin> history = _history(10000);
     expect(recentStats(history, 30).availableSize, 30);
     expect(numberDetails(history, 8).sampleSize, 10000);
+    final PatternReport patterns = const PatternRecognizer().analyze(history);
+    expect(patterns.spinsAnalyzed, 120);
+    expect(patterns.signals.length, lessThanOrEqualTo(4));
 
     final wheel = const WheelDistanceEngine().predict(history);
     final ensemble = const AdaptiveEnsembleEngine().predict(history);

@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.0 — 2026-08-17
+
+- Een live patroonherkenner als afzonderlijke dashboardkaart toegevoegd.
+- Detectie van herhalende getalcycli, categorie-afwisselingen, actuele reeksen
+  en terugkerende fysieke wielstappen geïmplementeerd.
+- Signalen worden na iedere draai opnieuw berekend over maximaal 120 recente
+  resultaten en verdwijnen direct wanneer het patroon wordt doorbroken.
+- Conservatieve bewijsdrempels, begrijpelijke uitleg en een expliciete
+  onafhankelijkheidswaarschuwing voorkomen dat toevalsruis als kans wordt
+  gepresenteerd.
+- Patroonanalyse voor weinig data, grote historie en responsieve browsers
+  getest.
+
 ## 1.2.0 — 2026-08-16
 
 - Automatische opvolgerkaart direct onder het invoerbord toegevoegd.

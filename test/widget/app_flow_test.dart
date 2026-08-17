@@ -245,6 +245,34 @@ void main() {
     await harness.dispose(tester);
   });
 
+  testWidgets('patroonkaart herberekent direct en wist een verbroken cyclus', (
+    WidgetTester tester,
+  ) async {
+    final _Harness harness = await _pumpApp(
+      tester,
+      const Size(1440, 1000),
+      seed: const <int>[1, 2, 3, 1, 2, 3],
+    );
+
+    expect(find.byKey(const Key('pattern-recognizer-card')), findsOneWidget);
+    expect(
+      find.byKey(const Key('pattern-signal-exactCycle-number')),
+      findsOneWidget,
+    );
+    expect(find.text('Herhalende getalcyclus'), findsOneWidget);
+
+    await _tapNumber(tester, 4);
+    await _settle(tester);
+
+    expect(
+      find.byKey(const Key('pattern-signal-exactCycle-number')),
+      findsNothing,
+    );
+    expect(find.text('7 draaien onderzocht'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    await harness.dispose(tester);
+  });
+
   testWidgets('200% tekstschaal en gelabelde tapdoelen blijven bruikbaar', (
     WidgetTester tester,
   ) async {
