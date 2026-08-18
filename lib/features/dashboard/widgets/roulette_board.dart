@@ -24,11 +24,16 @@ class RouletteBoard extends ConsumerStatefulWidget {
 }
 
 class _RouletteBoardState extends ConsumerState<RouletteBoard> {
+  static const Duration _spinFeedbackDuration = Duration(seconds: 4);
+
   final TextEditingController _numberController = TextEditingController();
   final FocusNode _numberFocus = FocusNode();
+  Timer? _spinFeedbackTimer;
+  int _spinFeedbackGeneration = 0;
 
   @override
   void dispose() {
+    _spinFeedbackTimer?.cancel();
     _numberController.dispose();
     _numberFocus.dispose();
     super.dispose();
@@ -190,6 +195,7 @@ class _RouletteBoardState extends ConsumerState<RouletteBoard> {
     final String input = _numberController.text.trim();
     final int? number = int.tryParse(input);
     if (number == null || number < 0 || number > 36) {
+      _dismissSpinFeedback();
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(const SnackBar(content: Text(AppStrings.invalidNumber)));
@@ -253,30 +259,75 @@ class _RouletteBoardState extends ConsumerState<RouletteBoard> {
         number,
       ).recentSuccessors;
       final List<int> visibleSuccessors = recentSuccessors.take(4).toList();
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          SnackBar(
-            content: Text(
+      _showSpinFeedback(
+        number,
+        visibleSuccessors,
+        hasMore: recentSuccessors.length > visibleSuccessors.length,
+      );
+    } on Object catch (error) {
+      if (mounted) {
+        _dismissSpinFeedback();
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBar(content: Text(AppStrings.error(error))));
+      }
+    }
+  }
+
+  void _showSpinFeedback(
+    int number,
+    List<int> visibleSuccessors, {
+    required bool hasMore,
+  }) {
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    _spinFeedbackTimer?.cancel();
+    final int generation = ++_spinFeedbackGeneration;
+    messenger
+      ..hideCurrentSnackBar()
+      ..removeCurrentMaterialBanner()
+      ..showMaterialBanner(
+        MaterialBanner(
+          key: const Key('spin-added-banner'),
+          leading: const Icon(Icons.check_circle_outline_rounded),
+          content: Semantics(
+            liveRegion: true,
+            child: Text(
               AppStrings.spinAddedSuccessors(
                 number,
                 visibleSuccessors,
-                hasMore: recentSuccessors.length > visibleSuccessors.length,
+                hasMore: hasMore,
               ),
             ),
-            action: SnackBarAction(
-              label: AppStrings.undo,
-              onPressed: () =>
-                  ref.read(appControllerProvider.notifier).undoLastSpin(),
-            ),
           ),
-        );
-    } on Object catch (error) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(AppStrings.error(error))));
+          actions: <Widget>[
+            TextButton(
+              key: const Key('spin-added-undo'),
+              onPressed: () {
+                _dismissSpinFeedback();
+                unawaited(
+                  ref.read(appControllerProvider.notifier).undoLastSpin(),
+                );
+              },
+              child: const Text(AppStrings.undo),
+            ),
+          ],
+        ),
+      );
+    _spinFeedbackTimer = Timer(_spinFeedbackDuration, () {
+      if (!mounted || generation != _spinFeedbackGeneration) {
+        return;
       }
+      ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+      _spinFeedbackTimer = null;
+    });
+  }
+
+  void _dismissSpinFeedback() {
+    _spinFeedbackTimer?.cancel();
+    _spinFeedbackTimer = null;
+    _spinFeedbackGeneration++;
+    if (mounted) {
+      ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
     }
   }
 

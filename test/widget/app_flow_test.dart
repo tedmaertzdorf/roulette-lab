@@ -159,11 +159,18 @@ void main() {
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await _settle(tester);
 
+    final Finder feedback = find.byKey(const Key('spin-added-banner'));
     EditableText editable = tester.widget<EditableText>(
       find.descendant(of: input, matching: find.byType(EditableText)),
     );
     expect(editable.focusNode.hasFocus, isTrue);
     expect(editable.controller.text, isEmpty);
+    expect(feedback, findsOneWidget);
+    expect(
+      tester.getBottomLeft(feedback).dy,
+      lessThanOrEqualTo(tester.getTopLeft(input).dy),
+      reason: 'De toevoegmelding hoort boven de mobiele invoerbalk te staan.',
+    );
     expect(
       harness.container
           .read(appControllerProvider)
@@ -181,6 +188,18 @@ void main() {
     );
     expect(editable.focusNode.hasFocus, isTrue);
     expect(editable.controller.text, isEmpty);
+    expect(feedback, findsOneWidget);
+    expect(
+      find.text('7 toegevoegd. Nog geen eerdere opvolger.'),
+      findsOneWidget,
+    );
+    await tester.pump(const Duration(milliseconds: 2500));
+    expect(
+      feedback,
+      findsOneWidget,
+      reason:
+          'De timer van de vorige invoer mag de nieuwste melding niet sluiten.',
+    );
     expect(
       harness.container
           .read(appControllerProvider)
@@ -204,6 +223,28 @@ void main() {
     expect(
       harness.container.read(appControllerProvider).requireValue.spins,
       hasLength(2),
+    );
+    expect(feedback, findsNothing);
+    expect(tester.takeException(), isNull);
+    await harness.dispose(tester);
+  });
+
+  testWidgets('bovenste toevoegmelding ondersteunt ongedaan maken', (
+    WidgetTester tester,
+  ) async {
+    final _Harness harness = await _pumpApp(tester, const Size(390, 844));
+
+    await _tapNumber(tester, 24);
+    await _settle(tester);
+    expect(find.byKey(const Key('spin-added-banner')), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('spin-added-undo')));
+    await _settle(tester);
+
+    expect(find.byKey(const Key('spin-added-banner')), findsNothing);
+    expect(
+      harness.container.read(appControllerProvider).requireValue.spins,
+      isEmpty,
     );
     expect(tester.takeException(), isNull);
     await harness.dispose(tester);
