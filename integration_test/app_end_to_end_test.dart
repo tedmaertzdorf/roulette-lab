@@ -39,6 +39,11 @@ void main() {
     );
     expect(editable.focusNode.hasFocus, isTrue);
     expect(editable.controller.text, isEmpty);
+    expect(find.byKey(const Key('spin-added-banner')), findsOneWidget);
+    expect(
+      tester.getBottomLeft(find.byKey(const Key('spin-added-banner'))).dy,
+      lessThanOrEqualTo(tester.getTopLeft(quickInput).dy),
+    );
     AppSnapshot snapshot = container.read(appControllerProvider).requireValue;
     expect(snapshot.spins.map((spin) => spin.number), <int>[0, 21, 30, 24]);
 

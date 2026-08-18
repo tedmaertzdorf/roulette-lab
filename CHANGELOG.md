@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.4.1 — 2026-08-18
+
+- De melding na het toevoegen van een getal staat nu bovenaan, zodat de snelle
+  invoerbalk en het iPhone-toetsenbord vrij bruikbaar blijven.
+- De bovenste melding behoudt de eerdere-opvolgerssamenvatting en een werkende
+  actie voor ongedaan maken.
+- Snel opeenvolgende invoer vervangt de vorige melding veilig; een oude timer
+  kan daardoor nooit een nieuwere melding sluiten.
+- Mobiele positie, blijvende invoerfocus en ongedaan maken zijn automatisch
+  getest.
+
 ## 1.4.0 — 2026-08-17
 
 - De snelle invoerbalk prominenter en mobielvriendelijk gemaakt.

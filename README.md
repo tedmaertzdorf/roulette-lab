@@ -8,7 +8,8 @@ Roulette Lab Offline is een persoonlijke Flutter-app voor lokale analyse van han
 
 - correct Europees tafelbord en fysieke wielvolgorde;
 - invoer- en analysemodus, numerieke desktopinvoer en geldige herhalingen;
-- mobielvriendelijke snelle invoerbalk die na iedere invoer actief blijft;
+- mobielvriendelijke snelle invoerbalk die na iedere invoer actief blijft, met
+  toevoegfeedback bovenaan zodat het invoerveld vrij zichtbaar blijft;
 - persistente, virtuele historie met edit, delete, undo en instelbare volgorde;
 - vensters 5/10/20/30, kleur, parity, hoog/laag, kolommen en nul;
 - getalfrequentie, posities, gaps, voorgangers, opvolgers en wielburen;

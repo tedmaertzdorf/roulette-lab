@@ -108,7 +108,7 @@ abstract final class AppStrings {
   static const String animations = 'Subtiele animaties';
   static const String haptics = 'Haptische feedback op Android';
   static const String privacyOffline = 'Privacy en offline werking';
-  static const String versionInfo = 'App 1.4.0 · database 1 · modellen 1';
+  static const String versionInfo = 'App 1.4.1 · database 1 · modellen 1';
   static const String noPrediction =
       'Maak een voorspelling om beide experimentele modellen naast elkaar te zien.';
   static const String insufficientBacktest =
